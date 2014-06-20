@@ -21,6 +21,7 @@
 
 #import "MMDrawerController.h"
 #import "UIViewController+MMDrawerController.h"
+#import "TFStatusBarController.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -34,7 +35,7 @@ CGFloat const MMDrawerDefaultBounceDistance = 50.0f;
 NSTimeInterval const MMDrawerDefaultBounceAnimationDuration = 0.2f;
 CGFloat const MMDrawerDefaultSecondBounceDistancePercentage = .25f;
 
-CGFloat const MMDrawerDefaultShadowRadius = 10.0f;
+CGFloat const MMDrawerDefaultShadowRadius = 5.0f;
 CGFloat const MMDrawerDefaultShadowOpacity = 0.8;
 
 NSTimeInterval const MMDrawerMinimumAnimationDuration = 0.15f;
@@ -840,6 +841,23 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     [self.dummyStatusBarView setBackgroundColor:_statusBarViewBackgroundColor];
 }
 
+- (void)setShadowOffset:(CGSize)shadowOffset {
+    
+    _shadowOffset = shadowOffset;
+    if (!CGSizeEqualToSize(shadowOffset, CGSizeZero)) {
+        _showsShadow = YES;
+        self.centerContainerView.layer.shadowOffset = shadowOffset;
+    }
+}
+
+- (void)setStatusbarController:(TFStatusBarController *)statusbarController {
+    
+    if ([_centerViewController isKindOfClass:[UINavigationController class]]) {
+        _statusbarController = statusbarController;
+        _statusbarController.centerVC = (UINavigationController *)_centerViewController;
+    }
+}
+
 #pragma mark - Getters
 -(CGFloat)maximumLeftDrawerWidth{
     if(self.leftDrawerViewController){
@@ -1037,6 +1055,9 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     else if(self.shouldStretchDrawer){
         [self applyOvershootScaleTransformForDrawerSide:drawerSide percentVisible:percentVisible];
     }
+    [_statusbarController interactiveControllerMoving:self
+                                              forSide:drawerSide
+                                          withPercent:percentVisible];
 }
 
 - (void)applyOvershootScaleTransformForDrawerSide:(MMDrawerSide)drawerSide percentVisible:(CGFloat)percentVisible{
@@ -1146,6 +1167,7 @@ static inline CGFloat originXForDrawerOriginAndTargetOriginOffset(CGFloat origin
         centerView.layer.masksToBounds = NO;
         centerView.layer.shadowRadius = MMDrawerDefaultShadowRadius;
         centerView.layer.shadowOpacity = MMDrawerDefaultShadowOpacity;
+        centerView.layer.shadowOffset = _shadowOffset;
         centerView.layer.shadowPath = [[UIBezierPath bezierPathWithRect:self.centerContainerView.bounds] CGPath];
     }
     else {

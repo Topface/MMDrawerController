@@ -95,6 +95,8 @@ typedef NS_ENUM(NSInteger, MMDrawerOpenCenterInteractionMode) {
 @class  MMDrawerController;
 typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * drawerController, MMDrawerSide drawerSide, CGFloat percentVisible);
 
+@class TFStatusBarController;
+
 @interface MMDrawerController : UIViewController
 
 ///---------------------------------------
@@ -213,6 +215,11 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  By default, this is set `[UIColor blackColor]`.
  */
 @property (nonatomic, strong) UIColor * statusBarViewBackgroundColor;
+
+
+@property (nonatomic, strong) TFStatusBarController *statusbarController;
+@property (nonatomic) CGSize shadowOffset;
+
 
 ///---------------------------------------
 /// @name Initializing a `MMDrawerController`

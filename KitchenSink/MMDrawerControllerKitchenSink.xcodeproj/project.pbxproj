@@ -275,6 +275,11 @@
 				CLASSPREFIX = MM;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Mutual Mobile";
+				TargetAttributes = {
+					294A1D0C17199537005BF6B1 = {
+						DevelopmentTeam = 2Y2B5M2TAL;
+					};
+				};
 			};
 			buildConfigurationList = 294A1D0817199537005BF6B1 /* Build configuration list for PBXProject "MMDrawerControllerKitchenSink" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -412,6 +417,7 @@
 		294A1D2B17199537005BF6B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExampleFiles/MMDrawerControllerKitchenSink-Prefix.pch";
 				INFOPLIST_FILE = "ExampleFiles/MMDrawerControllerKitchenSink-Info.plist";
@@ -425,6 +431,7 @@
 		294A1D2C17199537005BF6B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExampleFiles/MMDrawerControllerKitchenSink-Prefix.pch";
 				INFOPLIST_FILE = "ExampleFiles/MMDrawerControllerKitchenSink-Info.plist";
