@@ -217,6 +217,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
 @property (nonatomic, strong) UIColor * statusBarViewBackgroundColor;
 
 
+//TF-additions
 @property (nonatomic, strong) TFStatusBarController *statusbarController;
 @property (nonatomic) CGSize shadowOffset;
 
@@ -416,5 +417,10 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param gestureShouldRecognizeTouchBlock A block object to be called to determine if the given `touch` should be recognized by the given gesture.
  */
 -(void)setGestureShouldRecognizeTouchBlock:(BOOL(^)(MMDrawerController * drawerController, UIGestureRecognizer * gesture, UITouch * touch))gestureShouldRecognizeTouchBlock;
+
+
+//TF-additions
+- (void)switchFromSide:(MMDrawerSide)side completion:(void (^)(BOOL finished))completion;
+
 
 @end

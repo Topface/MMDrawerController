@@ -1324,4 +1324,25 @@ static inline CGFloat originXForDrawerOriginAndTargetOriginOffset(CGFloat origin
     return (CGRectContainsPoint(rightBezelRect, point) &&
             [self isPointContainedWithinCenterViewContentRect:point]);
 }
+
+//TF-additions
+- (void)switchFromSide:(MMDrawerSide)side completion:(void (^)(BOOL finished))completion {
+    
+    MMDrawerSide newSide = (side == MMDrawerSideRight) ? MMDrawerSideLeft : MMDrawerSideRight;
+    CGFloat velocity = 1600;
+    
+    [self closeDrawerAnimated:side
+                     velocity:velocity
+             animationOptions:UIViewAnimationOptionCurveEaseIn
+                   completion:^(BOOL finished) {
+                       [self prepareToPresentDrawer:newSide
+                                           animated:NO];
+                       [self openDrawerSide:newSide
+                                   animated:YES
+                                   velocity:velocity
+                           animationOptions:UIViewAnimationOptionCurveEaseOut
+                                 completion:completion];
+                   }];
+}
+
 @end
