@@ -646,6 +646,10 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
 	[self.childControllerContainerView setBackgroundColor:[UIColor blackColor]];
 
 	[self setupGestureRecognizers];
+    
+    //TF-additions
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.navigationItem setBackBarButtonItem:backButtonItem];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
