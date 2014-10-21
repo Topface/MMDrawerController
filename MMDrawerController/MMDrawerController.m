@@ -646,25 +646,32 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
 	[self.childControllerContainerView setBackgroundColor:[UIColor blackColor]];
 
 	[self setupGestureRecognizers];
-    
-    //TF-additions
-    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    [self.navigationItem setBackBarButtonItem:backButtonItem];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.centerViewController beginAppearanceTransition:YES animated:animated];
+    
+    //TF-additions
     if (_openSide == MMDrawerSideRight)
         [self.rightDrawerViewController beginAppearanceTransition:YES animated:animated];
     else if (_openSide == MMDrawerSideLeft)
         [self.leftDrawerViewController beginAppearanceTransition:YES animated:animated];
+    
+    //TF-additions
+    [self.navigationController setNavigationBarHidden:YES
+                                             animated:animated];
+    [_statusbarController interactiveControllerMoving:self
+                                              forSide:_openSide
+                                          withPercent:1];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self updateShadowForCenterView];
     [self.centerViewController endAppearanceTransition];
+    
+    //TF-additions
     if (_openSide == MMDrawerSideRight)
         [self.rightDrawerViewController endAppearanceTransition];
     else if (_openSide == MMDrawerSideLeft)
@@ -674,6 +681,8 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.centerViewController beginAppearanceTransition:NO animated:animated];
+    
+    //TF-additions
     if (_openSide == MMDrawerSideRight)
         [self.rightDrawerViewController beginAppearanceTransition:NO animated:animated];
     else if (_openSide == MMDrawerSideLeft)
@@ -683,6 +692,8 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self.centerViewController endAppearanceTransition];
+    
+    //TF-additions
     if (_openSide == MMDrawerSideRight)
         [self.rightDrawerViewController endAppearanceTransition];
     else if (_openSide == MMDrawerSideLeft)

@@ -35,7 +35,7 @@
     else if (side == MMDrawerSideRight)
         sideStyle = self.statusbarStyleForRightBG;
     else
-        sideStyle = UIStatusBarStyleDefault;
+        sideStyle = self.statusbarStyleForCenterBG;
     
     if (percent > PERCENTAGE_FOR_CHANGING)
         [[UIApplication sharedApplication] setStatusBarStyle:sideStyle animated:YES];
