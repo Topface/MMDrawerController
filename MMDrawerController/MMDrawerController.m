@@ -406,6 +406,10 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     [self addChildViewController:self.centerViewController];
     [self.centerViewController.view setFrame:self.childControllerContainerView.bounds];
     [self.centerContainerView addSubview:self.centerViewController.view];
+    
+    //TF-additions
+    [_tfDelegate centerVCDidSet:_centerViewController from:_openSide];
+    
     [self.childControllerContainerView bringSubviewToFront:self.centerContainerView];
     [self.centerViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [self updateShadowForCenterView];
@@ -479,6 +483,10 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
              [self setCenterViewController:newCenterViewController animated:animated];
              [oldCenterViewController endAppearanceTransition];
              [self.centerContainerView setFrame:oldCenterRect];
+             
+             //TF-additions
+             [_tfDelegate centerVCDidSet:_centerViewController from:_openSide];
+             
              [self updateDrawerVisualStateForDrawerSide:self.openSide percentVisible:1.0];
              [self.centerViewController beginAppearanceTransition:YES animated:animated];
              [sideDrawerViewController beginAppearanceTransition:NO animated:animated];
@@ -661,7 +669,7 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     //TF-additions
     [self.navigationController setNavigationBarHidden:YES
                                              animated:animated];
-    [_statusbarController interactiveControllerMoving:self
+    [_tfDelegate interactiveControllerMoving:self
                                               forSide:_openSide
                                           withPercent:1];
 }
@@ -881,13 +889,6 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     }
 }
 
-- (void)setStatusbarController:(TFStatusBarController *)statusbarController {
-    
-    if ([_centerViewController isKindOfClass:[UINavigationController class]]) {
-        _statusbarController = statusbarController;
-        _statusbarController.centerVC = (UINavigationController *)_centerViewController;
-    }
-}
 
 #pragma mark - Getters
 -(CGFloat)maximumLeftDrawerWidth{
@@ -1086,9 +1087,9 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     else if(self.shouldStretchDrawer){
         [self applyOvershootScaleTransformForDrawerSide:drawerSide percentVisible:percentVisible];
     }
-    [_statusbarController interactiveControllerMoving:self
-                                              forSide:drawerSide
-                                          withPercent:percentVisible];
+    [_tfDelegate interactiveControllerMoving:self
+                                      forSide:drawerSide
+                                  withPercent:percentVisible];
 }
 
 - (void)applyOvershootScaleTransformForDrawerSide:(MMDrawerSide)drawerSide percentVisible:(CGFloat)percentVisible{

@@ -95,7 +95,9 @@ typedef NS_ENUM(NSInteger, MMDrawerOpenCenterInteractionMode) {
 @class  MMDrawerController;
 typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * drawerController, MMDrawerSide drawerSide, CGFloat percentVisible);
 
-@class TFStatusBarController;
+
+@protocol TF_MMDrawerDelegate;
+
 
 @interface MMDrawerController : UIViewController
 
@@ -218,7 +220,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
 
 
 //TF-additions
-@property (nonatomic, strong) TFStatusBarController *statusbarController;
+@property (nonatomic, weak) id<TF_MMDrawerDelegate> tfDelegate;
 @property (nonatomic) CGSize shadowOffset;
 
 
@@ -422,5 +424,14 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
 //TF-additions
 - (void)switchFromSide:(MMDrawerSide)side completion:(void (^)(BOOL finished))completion;
 
+
+@end
+
+
+//TF-additions
+@protocol TF_MMDrawerDelegate <NSObject>
+
+- (void)interactiveControllerMoving:(MMDrawerController *)controller forSide:(MMDrawerSide)side withPercent:(CGFloat)percent;
+- (void)centerVCDidSet:(UIViewController *)newCenterVC from:(MMDrawerSide)drawerSide;
 
 @end
