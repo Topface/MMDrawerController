@@ -447,17 +447,24 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     }
 }
 
--(void)setCenterViewController:(UIViewController *)newCenterViewController withFullCloseAnimation:(BOOL)animated completion:(void(^)(BOOL finished))completion{
-    if(self.openSide != MMDrawerSideNone &&
-       animated){
-        
-        UIViewController * sideDrawerViewController = [self sideDrawerViewControllerForSide:self.openSide];
+-(void)setCenterViewController:(UIViewController *)newCenterViewController withFullCloseAnimation:(BOOL)animated completion:(void(^)(BOOL finished))completion {
+    
+    [self setCenterViewController:newCenterViewController
+                      throughSide:self.openSide
+           withFullCloseAnimation:animated
+                       completion:completion];
+}
+
+-(void)setCenterViewController:(UIViewController *)newCenterViewController throughSide:(MMDrawerSide)side withFullCloseAnimation:(BOOL)animated completion:(void(^)(BOOL finished))completion {
+    
+    if(animated){
+        UIViewController * sideDrawerViewController = [self sideDrawerViewControllerForSide:side];
         
         CGFloat targetClosePoint = 0.0f;
-        if(self.openSide == MMDrawerSideRight){
+        if(side == MMDrawerSideRight){
             targetClosePoint = -CGRectGetWidth(self.childControllerContainerView.bounds);
         }
-        else if(self.openSide == MMDrawerSideLeft) {
+        else if(side == MMDrawerSideLeft) {
             targetClosePoint = CGRectGetWidth(self.childControllerContainerView.bounds);
         }
         
@@ -469,6 +476,14 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
         UIViewController * oldCenterViewController = self.centerViewController;
         [oldCenterViewController beginAppearanceTransition:NO animated:animated];
         newCenterRect.origin.x = targetClosePoint;
+        
+        CGRect visibleRect = CGRectIntersection(self.childControllerContainerView.bounds,sideDrawerViewController.view.frame);
+        BOOL drawerFullyCovered = (CGRectContainsRect(self.centerContainerView.frame, visibleRect) ||
+                                   CGRectIsNull(visibleRect));
+        if(drawerFullyCovered){
+            [self prepareToPresentDrawer:side animated:animated];
+        }
+        
         [UIView
          animateWithDuration:firstDuration
          delay:0.0
@@ -476,6 +491,12 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
          animations:^{
              [self.centerContainerView setFrame:newCenterRect];
              [sideDrawerViewController.view setFrame:self.childControllerContainerView.bounds];
+             //TF-addition
+             if (_tfDelegate) {
+                 [_tfDelegate interactiveControllerMoving:self
+                                                  forSide:side
+                                              withPercent:1.];
+             }
          }
          completion:^(BOOL finished) {
 
@@ -1087,9 +1108,13 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     else if(self.shouldStretchDrawer){
         [self applyOvershootScaleTransformForDrawerSide:drawerSide percentVisible:percentVisible];
     }
-    [_tfDelegate interactiveControllerMoving:self
-                                      forSide:drawerSide
-                                  withPercent:percentVisible];
+    
+    //TF-addition
+    if (_tfDelegate) {
+        [_tfDelegate interactiveControllerMoving:self
+                                         forSide:drawerSide
+                                     withPercent:percentVisible];
+    }
 }
 
 - (void)applyOvershootScaleTransformForDrawerSide:(MMDrawerSide)drawerSide percentVisible:(CGFloat)percentVisible{

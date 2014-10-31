@@ -421,9 +421,10 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
 -(void)setGestureShouldRecognizeTouchBlock:(BOOL(^)(MMDrawerController * drawerController, UIGestureRecognizer * gesture, UITouch * touch))gestureShouldRecognizeTouchBlock;
 
 
+#pragma mark - TF-additions
 //TF-additions
 - (void)switchFromSide:(MMDrawerSide)side completion:(void (^)(BOOL finished))completion;
-
+- (void)setCenterViewController:(UIViewController *)newCenterViewController throughSide:(MMDrawerSide)side withFullCloseAnimation:(BOOL)animated completion:(void(^)(BOOL finished))completion;
 
 @end
 
