@@ -280,11 +280,13 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
             CGFloat visibleDrawerPoints = CGRectGetMinX(self.centerContainerView.frame);
             percentVisble = MAX(0.0,visibleDrawerPoints/self.maximumLeftDrawerWidth);
             visibleSide = MMDrawerSideLeft;
+            [self.statusChangeDelegate leftSideClosed:self];
         }
         else if(rightDrawerVisible){
             CGFloat visibleDrawerPoints = CGRectGetWidth(self.centerContainerView.frame)-CGRectGetMaxX(self.centerContainerView.frame);
             percentVisble = MAX(0.0,visibleDrawerPoints/self.maximumRightDrawerWidth);
             visibleSide = MMDrawerSideRight;
+            [self.statusChangeDelegate rightSideClosed:self];
         }
         
         UIViewController * sideDrawerViewController = [self sideDrawerViewControllerForSide:visibleSide];
@@ -343,10 +345,12 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
             if(drawerSide == MMDrawerSideLeft){
                 newFrame = self.centerContainerView.frame;
                 newFrame.origin.x = self.maximumLeftDrawerWidth;
+                [self.statusChangeDelegate leftSideOpened:self];
             }
             else {
                 newFrame = self.centerContainerView.frame;
                 newFrame.origin.x = 0-self.maximumRightDrawerWidth;
+                [self.statusChangeDelegate rightSideOpened:self];
             }
             
             CGFloat distance = ABS(CGRectGetMinX(oldFrame)-newFrame.origin.x);
