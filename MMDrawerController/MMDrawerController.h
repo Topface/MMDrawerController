@@ -97,8 +97,6 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
 
 
 @protocol TF_MMDrawerDelegate;
-@protocol TFStatusChangesProtocol;
-
 
 @interface MMDrawerController : UIViewController
 
@@ -223,8 +221,6 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
 //TF-additions
 @property (nonatomic, weak) id<TF_MMDrawerDelegate> tfDelegate;
 @property (nonatomic) CGSize shadowOffset;
-@property (nonatomic, weak) id<TFStatusChangesProtocol> statusChangeDelegate;
-
 
 ///---------------------------------------
 /// @name Initializing a `MMDrawerController`
@@ -437,15 +433,16 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
 - (void)interactiveControllerMoving:(MMDrawerController *)controller forSide:(MMDrawerSide)side withPercent:(CGFloat)percent;
 - (void)centerVCDidSet:(UIViewController *)newCenterVC from:(MMDrawerSide)drawerSide;
 
-@end
-
-
-@protocol TFStatusChangesProtocol <NSObject>
-
-@required
 - (void)leftSideClosed:(MMDrawerController *)drawerController;
 - (void)leftSideOpened:(MMDrawerController *)drawerController;
 - (void)rightSideClosed:(MMDrawerController *)drawerController;
 - (void)rightSideOpened:(MMDrawerController *)drawerController;
+
+/**
+ if opening flag is YES, it means that VC start/end opening,
+ if opening flag is NO, it means that VC start/end closing
+ */
+- (void)startMovingSide:(MMDrawerSide)side withController:(MMDrawerController *)drawerController;
+- (void)endMovingSide:(MMDrawerSide)side opening:(BOOL)opening withController:(MMDrawerController *)drawerController;
 
 @end

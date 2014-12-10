@@ -21,7 +21,7 @@
 
 #import "MMDrawerController.h"
 #import "UIViewController+MMDrawerController.h"
-#import "TFStatusBarController.h"
+#import "TFDrawerDelegate.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -280,14 +280,13 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
             CGFloat visibleDrawerPoints = CGRectGetMinX(self.centerContainerView.frame);
             percentVisble = MAX(0.0,visibleDrawerPoints/self.maximumLeftDrawerWidth);
             visibleSide = MMDrawerSideLeft;
-            [self.statusChangeDelegate leftSideClosed:self];
         }
         else if(rightDrawerVisible){
             CGFloat visibleDrawerPoints = CGRectGetWidth(self.centerContainerView.frame)-CGRectGetMaxX(self.centerContainerView.frame);
             percentVisble = MAX(0.0,visibleDrawerPoints/self.maximumRightDrawerWidth);
             visibleSide = MMDrawerSideRight;
-            [self.statusChangeDelegate rightSideClosed:self];
         }
+        [self.tfDelegate startMovingSide:visibleSide withController:self];
         
         UIViewController * sideDrawerViewController = [self sideDrawerViewControllerForSide:visibleSide];
         
@@ -305,6 +304,7 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
              [self updateDrawerVisualStateForDrawerSide:visibleSide percentVisible:0.0];
          }
          completion:^(BOOL finished) {
+             [self.tfDelegate endMovingSide:visibleSide opening:NO withController:self];
              [sideDrawerViewController endAppearanceTransition];
              [self setOpenSide:MMDrawerSideNone];
              [self resetDrawerVisualStateForDrawerSide:visibleSide];
@@ -345,13 +345,12 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
             if(drawerSide == MMDrawerSideLeft){
                 newFrame = self.centerContainerView.frame;
                 newFrame.origin.x = self.maximumLeftDrawerWidth;
-                [self.statusChangeDelegate leftSideOpened:self];
             }
             else {
                 newFrame = self.centerContainerView.frame;
                 newFrame.origin.x = 0-self.maximumRightDrawerWidth;
-                [self.statusChangeDelegate rightSideOpened:self];
             }
+            [self.tfDelegate startMovingSide:drawerSide withController:self];
             
             CGFloat distance = ABS(CGRectGetMinX(oldFrame)-newFrame.origin.x);
             NSTimeInterval duration = MAX(distance/ABS(velocity),MMDrawerMinimumAnimationDuration);
@@ -366,6 +365,7 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
                  [self updateDrawerVisualStateForDrawerSide:drawerSide percentVisible:1.0];
              }
              completion:^(BOOL finished) {
+                 [self.tfDelegate endMovingSide:drawerSide opening:YES withController:self];
                  //End the appearance transition if it already wasn't open.
                  if(drawerSide != self.openSide){
                      [sideDrawerViewController endAppearanceTransition];
