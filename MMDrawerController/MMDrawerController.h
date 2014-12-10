@@ -433,11 +433,6 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
 - (void)interactiveControllerMoving:(MMDrawerController *)controller forSide:(MMDrawerSide)side withPercent:(CGFloat)percent;
 - (void)centerVCDidSet:(UIViewController *)newCenterVC from:(MMDrawerSide)drawerSide;
 
-- (void)leftSideClosed:(MMDrawerController *)drawerController;
-- (void)leftSideOpened:(MMDrawerController *)drawerController;
-- (void)rightSideClosed:(MMDrawerController *)drawerController;
-- (void)rightSideOpened:(MMDrawerController *)drawerController;
-
 /**
  if opening flag is YES, it means that VC start/end opening,
  if opening flag is NO, it means that VC start/end closing
