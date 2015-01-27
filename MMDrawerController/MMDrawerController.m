@@ -21,7 +21,7 @@
 
 #import "MMDrawerController.h"
 #import "UIViewController+MMDrawerController.h"
-#import "TFDrawerDelegate.h"
+#import "DrawerDelegate.h"
 
 #import <QuartzCore/QuartzCore.h>
 
