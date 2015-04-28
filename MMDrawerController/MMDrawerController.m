@@ -487,7 +487,7 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
         if(drawerFullyCovered){
             [self prepareToPresentDrawer:side animated:animated];
         }
-        
+
         [UIView
          animateWithDuration:firstDuration
          delay:0.0
@@ -515,6 +515,7 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
              [self updateDrawerVisualStateForDrawerSide:self.openSide percentVisible:1.0];
              [self.centerViewController beginAppearanceTransition:YES animated:animated];
              [sideDrawerViewController beginAppearanceTransition:NO animated:animated];
+             [_tfDelegate startMovingSide:side withController:self];
             [UIView
              animateWithDuration:[self animationDurationForAnimationDistance:CGRectGetWidth(self.childControllerContainerView.bounds)]
              delay:MMDrawerDefaultFullAnimationDelay
@@ -532,7 +533,9 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
                  [sideDrawerViewController.view setFrame:sideDrawerViewController.mm_visibleDrawerFrame];
                  
                  [self setOpenSide:MMDrawerSideNone];
-                 
+
+                 [_tfDelegate endMovingSide:side opening:NO withController:self];
+
                  if(completion){
                      completion(finished);
                  }
