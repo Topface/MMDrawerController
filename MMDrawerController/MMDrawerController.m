@@ -487,6 +487,9 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
         if(drawerFullyCovered){
             [self prepareToPresentDrawer:side animated:animated];
         }
+        
+        //TF-addition
+        [sideDrawerViewController.view setFrame:self.childControllerContainerView.bounds];
 
         [UIView
          animateWithDuration:firstDuration
@@ -494,8 +497,8 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
          options:UIViewAnimationOptionCurveEaseInOut
          animations:^{
              [self.centerContainerView setFrame:newCenterRect];
-             [sideDrawerViewController.view setFrame:self.childControllerContainerView.bounds];
              //TF-addition
+             [sideDrawerViewController.view layoutIfNeeded];
              if (_tfDelegate) {
                  [_tfDelegate interactiveControllerMoving:self
                                                   forSide:side
